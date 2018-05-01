@@ -5,11 +5,13 @@ import WxpayAPI_python.Exception
 import WxpayAPI_python.Config
 import WxpayAPI_python.Data
 
+from WxpayAPI_python.Util import *  # 导入 php 的同名同功能函数
+
 # import WxpayAPI_python.Data.WxPayResults as WxPayResults
 WxPayException = WxpayAPI_python.Exception.WxPayException
 WxPayConfig = WxpayAPI_python.Config.WxPayConfig
 WxPayResults = WxpayAPI_python.Data.WxPayResults
-from WxpayAPI_python.Util import *  # 导入 php 的同名同功能函数
+WxPayReport = WxpayAPI_python.Data.WxPayReport
 
 
 class WxPayApi():
@@ -42,7 +44,7 @@ class WxPayApi():
 
         # 异步通知url未设置，则使用配置文件中的url
         if (not inputObj.IsNotify_urlSet()):
-            inputObj.SetNotify_url(WxPayConfig.NOTIFY_URL)  # 异步通知url
+            inputObj.SetNotify_url(WxPayConfig.NOTIFY_URL)  # 异步通知url  # todo NOTIFY_URL 找不到定义
 
         inputObj.SetAppid(WxPayConfig.APPID)  # 公众账号ID
         inputObj.SetMch_id(WxPayConfig.MCHID)  # 商户号
@@ -142,7 +144,6 @@ class WxPayApi():
         self.reportCostTime(url, startTimeStamp, result)  # 上报请求花费时间
         return result
 
-    #
     #  查询退款
     #  提交退款申请后，通过调用该接口查询退款状态。退款有一定延时，
     #  用零钱支付的退款20分钟内到账，银行卡支付的退款3个工作日后重新查询退款状态。
@@ -222,7 +223,6 @@ class WxPayApi():
         self.reportCostTime(url, startTimeStamp, result)  # 上报请求花费时间
         return result
 
-    #
     #  撤销订单API接口，WxPayReverse中参数out_trade_no和transaction_id必须填写一个
     #  appid、mchid、spbill_create_ip、nonce_str不需要填入
     #  @param WxPayReverse inputObj
@@ -244,7 +244,6 @@ class WxPayApi():
         self.reportCostTime(url, startTimeStamp, result)  # 上报请求花费时间
         return result
 
-    #
     #  测速上报，该方法内部封装在report中，使用时请注意异常流程
     #  WxPayReport中interface_url、return_code、result_code、user_ip、execute_time_必填
     #  appid、mchid、spbill_create_ip、nonce_str不需要填入
@@ -277,7 +276,6 @@ class WxPayApi():
         response = self.postXmlCurl(xml, url, False, timeOut)
         return response
 
-    #
     #  生成二维码规则,模式一生成支付二维码
     #  appid、mchid、spbill_create_ip、nonce_str不需要填入
     #  @param WxPayBizPayUrl inputObj
@@ -318,29 +316,28 @@ class WxPayApi():
         result = WxPayResults.Init(response)
         self.reportCostTime(url, startTimeStamp, result)  # 上报请求花费时间
         return result
-        #
-        #  支付结果通用通知
-        #  @param def callback
-        #  直接回调函数使用方法: notify(you_def)
-        #  回调类成员函数方法:notify(array(this, you_def))
-        #  callback  原型为：def def_name(data)
 
+    #  支付结果通用通知
+    #  @param def callback
+    #  直接回调函数使用方法: notify(you_def)
+    #  回调类成员函数方法:notify(array(this, you_def))
+    #  callback  原型为：def def_name(data)
     def notify(self, callback, msg):  # todo msg
         # 获取通知的数据
-        xml = file_get_contents('php://input')
+        xml = file_get_contents('php://input')  # todo 应该需要传参
         # 如果返回成功则验证签名
         try:
             result = WxPayResults.Init(xml)
-        except  WxPayException as e:
+        except WxPayException as e:
             msg = e.errorMessage()  # todo 要直接改掉 穿进来的 msg
             return False
-        return call_user_func(callback, result)
+        return callback(result)
         #
         #  产生随机字符串，不长于32位
         #  @param int length
         #  @return 产生的随机字符串
 
-    def getNonceStr(length=32):
+    def getNonceStr(self, length=32):
         chars = "abcdefghijklmnopqrstuvwxyz0123456789"
         str = ""
         for i in range(length):
@@ -353,7 +350,6 @@ class WxPayApi():
         return xml
         # echo xml  # todo 改为返回
 
-    #
     #  上报数据， 上报的时候将屏蔽所有异常流程
     #  @param string usrl
     #  @param int startTimeStamp
@@ -371,8 +367,7 @@ class WxPayApi():
             return
         # 上报逻辑
         endTimeStamp = self.getMillisecond()
-        objInput = new
-        WxPayReport()
+        objInput = WxPayReport()
         objInput.SetInterface_url(url)
         objInput.SetExecute_time_(endTimeStamp - startTimeStamp)
         # 返回状态码
@@ -402,7 +397,6 @@ class WxPayApi():
             pass  # 不做任何处理
 
     #  以post方式提交xml到对应的接口url
-    #
     #  @param string xml  需要post的xml数据
     #  @param string url  url
     #  @param bool useCert 是否需要证书，默认不需要

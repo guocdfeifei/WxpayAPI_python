@@ -10,6 +10,7 @@
 * php 转换为 python 相对比较容易
 
 # 目标
+* 基本按 php 版本的结构逐行进行翻译,尽量少修改代码结构,亿便于同步更新 php 版本
 * 做成有通用意义的 python 模块,不依赖特定 web 框架
 
 # 感谢
@@ -30,10 +31,14 @@
 * [ ]实现逻辑,目前有些没完成
 * [ ]测试
 
+# 问题:
+    * 由于注释太多,没有全部改为 python 标准的 docstring 形式
+    * 可能 php 版也存在的问题:
+        * NOTIFY_URL 和 return_code 找不到
+
 # TODO
-* Data 基本翻译完, simplexml_load_string实属的实现
-* 还有几个 new self() 等的地方没改
+* simplexml_load_string 实属的实现
+* 几个 new self() 等的地方 待测试
 * 直接使用 msg 指针的几个地方
 * 使用 file_get_contents 
-* return_code
 * 证书路径

@@ -2,9 +2,10 @@
 import WxpayAPI_python.Config
 import WxpayAPI_python.Exception as Exception
 
+from WxpayAPI_python.Util import *  # 导入 php 的同名同功能函数
+
 WxPayConfig = WxpayAPI_python.Config.WxPayConfig
 
-from WxpayAPI_python.Util import *  # 导入 php 的同名同功能函数
 
 class WxPayDataBase:
     """
@@ -48,7 +49,6 @@ class WxPayDataBase:
     #  将xml转为array
     #  @param string xml
     #  @throws WxPayException
-    # /
     def FromXml(self, xml):
         if not xml:
             raise Exception.WxPayException("xml数据异常！")
@@ -61,7 +61,6 @@ class WxPayDataBase:
         return self.values
 
     #  格式化参数格式化成url参数
-    # /
     def ToUrlParams(self):
         buff = ""
         for k in self.values:
@@ -73,7 +72,6 @@ class WxPayDataBase:
 
     #  生成签名
     #  @return 签名，本函数不覆盖sign成员变量，如要设置签名需要调用SetSign方法赋值
-    # /
     def MakeSign(self):
         # 签名步骤一：按字典序排序参数
         ksort(self.values)
@@ -92,15 +90,9 @@ class WxPayDataBase:
         return self.values
 
 
-#
 #  接口调用结果类
-#  @author widyhu
-#
-# /
 class WxPayResults(WxPayDataBase):
-    #
     #  检测签名
-    # /
     def CheckSign(self):
         # fix异常
         if not self.IsSignSet():
@@ -110,18 +102,14 @@ class WxPayResults(WxPayDataBase):
             return True
         raise Exception.WxPayException("签名错误！")
 
-    #
     #  使用数组初始化
     #  @param array array
-    # /
     def FromArray(self, array):
         self.values = array
 
-    #
     #  使用数组初始化对象
     #  @param array array
     #  @param 是否检测签名 noCheckSign
-    # /
     def InitFromArray(self, array, noCheckSign=False):
         # obj = new self() todo 不使用php的方式
         self.FromArray(array)
@@ -129,18 +117,15 @@ class WxPayResults(WxPayDataBase):
             self.CheckSign()
         return self
 
-    #
     #  设置参数
     #  @param string key
     #  @param string value
-    # /
     def SetData(self, key, value):
         self.values[key] = value
 
     #  将xml转为array
     #  @param string xml
     #  @throws WxPayException
-    # /
     def Init(self, xml):
         # obj = new self() todo 不使用php的方式
         self.FromXml(xml)
@@ -151,54 +136,36 @@ class WxPayResults(WxPayDataBase):
         return self.GetValues()
 
 
-#
 #  回调基础类
-#  @author widyhu
-#
-# /
 class WxPayNotifyReply(WxPayDataBase):
-    #
     #  设置错误码 FAIL 或者 SUCCESS
     #  @param string
-    # /
     def SetReturn_code(self, return_code):
         self.values['return_code'] = return_code
 
-    #
     #  获取错误码 FAIL 或者 SUCCESS
     #  @return string return_code
-    # /
     def GetReturn_code(self):
         return self.values['return_code']
 
-    #
     #  设置错误信息
     #  @param string return_code
-    # /
     def SetReturn_msg(self, return_msg):
         self.values['return_msg'] = return_msg
 
-    #
     #  获取错误信息
     #  @return string
-    # /
     def GetReturn_msg(self):
         return self.values['return_msg']
 
-    #
     #  设置返回参数
     #  @param string key
     #  @param string value
-    # /
     def SetData(self, key, value):
         self.values[key] = value
 
 
-#
 #  统一下单输入对象
-#  @author widyhu
-#
-# /
 class WxPayUnifiedOrder(WxPayDataBase):
     #  设置微信分配的公众账号ID
     #  @param string value
@@ -471,11 +438,7 @@ class WxPayUnifiedOrder(WxPayDataBase):
         return array_key_exists('openid', self.values)
 
 
-#
 #  订单查询输入对象
-#  @author widyhu
-#
-# /
 class WxPayOrderQuery(WxPayDataBase):
     #  设置微信分配的公众账号ID
     #  @param string value 
@@ -553,11 +516,7 @@ class WxPayOrderQuery(WxPayDataBase):
         return array_key_exists('nonce_str', self.values)
 
 
-#
 #  关闭订单输入对象
-#  @author widyhu
-#
-# /
 class WxPayCloseOrder(WxPayDataBase):
     #  设置微信分配的公众账号ID
     #  @param string value
@@ -620,11 +579,7 @@ class WxPayCloseOrder(WxPayDataBase):
         return array_key_exists('nonce_str', self.values)
 
 
-#
 #  提交退款输入对象
-#  @author widyhu
-#
-# /
 class WxPayRefund(WxPayDataBase):
     #  设置微信分配的公众账号ID
     #  @param string value
@@ -792,11 +747,7 @@ class WxPayRefund(WxPayDataBase):
         return array_key_exists('op_user_id', self.values)
 
 
-#
 #  退款查询输入对象
-#  @author widyhu
-#
-# /
 class WxPayRefundQuery(WxPayDataBase):
     #  设置微信分配的公众账号ID
     #  @param string value
@@ -919,11 +870,7 @@ class WxPayRefundQuery(WxPayDataBase):
         return array_key_exists('refund_id', self.values)
 
 
-#
 #  下载对账单输入对象
-#  @author widyhu
-#
-# /
 class WxPayDownloadBill(WxPayDataBase):
     #  设置微信分配的公众账号ID
     #  @param string value
@@ -1016,11 +963,8 @@ class WxPayDownloadBill(WxPayDataBase):
         return array_key_exists('bill_type', self.values)
 
 
-#
 #  测速上报输入对象
 #  @author widyhu
-#
-# /
 class WxPayReport(WxPayDataBase):
     #  设置微信分配的公众账号ID
     #  @param string value
@@ -1233,11 +1177,7 @@ class WxPayReport(WxPayDataBase):
         return array_key_exists('time', self.values)
 
 
-#
 #  短链转换输入对象
-#  @author widyhu
-#
-# /
 class WxPayShortUrl(WxPayDataBase):
     #  设置微信分配的公众账号ID
     #  @param string value
@@ -1300,11 +1240,7 @@ class WxPayShortUrl(WxPayDataBase):
         return array_key_exists('nonce_str', self.values)
 
 
-#
 #  提交被扫输入对象
-#  @author widyhu
-#
-# /
 class WxPayMicroPay(WxPayDataBase):
     #  设置微信分配的公众账号ID
     #  @param string value
@@ -1532,11 +1468,7 @@ class WxPayMicroPay(WxPayDataBase):
         return array_key_exists('auth_code', self.values)
 
 
-#
 #  撤销输入对象
-#  @author widyhu
-#
-# /
 class WxPayReverse(WxPayDataBase):
     #  设置微信分配的公众账号ID
     #  @param string value
@@ -1614,11 +1546,7 @@ class WxPayReverse(WxPayDataBase):
         return array_key_exists('nonce_str', self.values)
 
 
-#
 #  提交JSAPI输入对象
-#  @author widyhu
-#
-# /
 class WxPayJsApiPay(WxPayDataBase):
     #  设置微信分配的公众账号ID
     #  @param string value
@@ -1711,11 +1639,7 @@ class WxPayJsApiPay(WxPayDataBase):
         return array_key_exists('paySign', self.values)
 
 
-#
 #  扫码支付模式一生成二维码参数
-#  @author widyhu
-#
-# /
 class WxPayBizPayUrl(WxPayDataBase):
     #  设置微信分配的公众账号ID
     #  @param string value

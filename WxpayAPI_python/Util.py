@@ -75,8 +75,6 @@ def microtime(get_as_float=False):
 
 
 def mt_rand(low=0, high=sys.maxint):
-    """Generate a better random value
-    """
     return random.randint(low, high)
 
 
