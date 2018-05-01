@@ -10,10 +10,10 @@ class WxPayConfig:
     # MCHID：商户号（必须配置，开户邮件中可查看）
     #
     # KEY：商户支付密钥，参考开户邮件设置（必须配置，登录商户平台自行设置）
-    # 设置地址：https:#pay.weixin.qq.com/index.php/account/api_cert
+    # 设置地址：https://pay.weixin.qq.com/index.php/account/api_cert
     #
     # APPSECRET：公众帐号secert（仅JSAPI支付的时候需要配置， 登录公众平台，进入开发者中心可设置），
-    # 获取地址：https:#mp.weixin.qq.com/advanced/advanced?action=dev&t=advanced/dev&token=2005451881&lang=zh_CN
+    # 获取地址：https://mp.weixin.qq.com/advanced/advanced?action=dev&t=advanced/dev&token=2005451881&lang=zh_CN
     # @var string
     APPID = 'wx426b3015555a46be'
     MCHID = '1900009851'
@@ -23,7 +23,7 @@ class WxPayConfig:
     # =======【证书路径设置】=====================================
     # TODO：设置商户证书路径
     # 证书路径,注意应该填写绝对路径（仅退款、撤销订单时需要，可登录商户平台下载，
-    # API证书下载地址：https:#pay.weixin.qq.com/index.php/account/api_cert，下载之前需要安装商户操作证书）
+    # API证书下载地址：https://pay.weixin.qq.com/index.php/account/api_cert，下载之前需要安装商户操作证书）
     # @var path
     SSLCERT_PATH = '../cert/apiclient_cert.pem'
     SSLKEY_PATH = '../cert/apiclient_key.pem'

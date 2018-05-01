@@ -70,7 +70,7 @@ class WxPayApi():
         @return 成功时返回，其他抛异常
         """
 
-        url = "https:#api.mch.weixin.qq.com/pay/orderquery"
+        url = "https://api.mch.weixin.qq.com/pay/orderquery"
         # 检测必填参数
         if not inputObj.IsOut_trade_noSet() and not inputObj.IsTransaction_idSet():
             raise WxPayException("订单查询接口中，out_trade_no、transaction_id至少填一个！")
@@ -96,7 +96,7 @@ class WxPayApi():
         @throws WxPayException
         @return 成功时返回，其他抛异常
         """
-        url = "https:#api.mch.weixin.qq.com/pay/closeorder"
+        url = "https://api.mch.weixin.qq.com/pay/closeorder"
         # 检测必填参数
         if not inputObj.IsOut_trade_noSet():
             raise WxPayException("订单查询接口中，out_trade_no必填！")
@@ -121,7 +121,7 @@ class WxPayApi():
           @throws WxPayException
           @return 成功时返回，其他抛异常
         """
-        url = "https:#api.mch.weixin.qq.com/secapi/pay/refund"
+        url = "https://api.mch.weixin.qq.com/secapi/pay/refund"
         # 检测必填参数
         if not inputObj.IsOut_trade_noSet() and not inputObj.IsTransaction_idSet():
             raise WxPayException("退款申请接口中，out_trade_no、transaction_id至少填一个！")
@@ -154,7 +154,7 @@ class WxPayApi():
     #  @throws WxPayException
     #  @return 成功时返回，其他抛异常
     def refundQuery(self, inputObj, timeOut=6):
-        url = "https:#api.mch.weixin.qq.com/pay/refundquery"
+        url = "https://api.mch.weixin.qq.com/pay/refundquery"
         # 检测必填参数
         if not inputObj.IsOut_refund_noSet() and \
                 not inputObj.IsOut_trade_noSet() and \
@@ -179,7 +179,7 @@ class WxPayApi():
     #  @throws WxPayException
     #  @return 成功时返回，其他抛异常
     def downloadBill(self, inputObj, timeOut=6):
-        url = "https:#api.mch.weixin.qq.com/pay/downloadbill"
+        url = "https://api.mch.weixin.qq.com/pay/downloadbill"
         # 检测必填参数
         if not inputObj.IsBill_dateSet():
             raise WxPayException("对账单接口中，缺少必填参数bill_date！")
@@ -201,7 +201,7 @@ class WxPayApi():
     #  @param WxPayWxPayMicroPay inputObj
     #  @param int timeOut
     def micropay(self, inputObj, timeOut=10):
-        url = "https:#api.mch.weixin.qq.com/pay/micropay"
+        url = "https://api.mch.weixin.qq.com/pay/micropay"
         # 检测必填参数
         if not inputObj.IsBodySet():
             raise WxPayException("提交被扫支付API接口中，缺少必填参数body！")
@@ -229,7 +229,7 @@ class WxPayApi():
     #  @param int timeOut
     #  @throws WxPayException
     def reverse(self, inputObj, timeOut=6):
-        url = "https:#api.mch.weixin.qq.com/secapi/pay/reverse"
+        url = "https://api.mch.weixin.qq.com/secapi/pay/reverse"
         # 检测必填参数
         if not inputObj.IsOut_trade_noSet() and not inputObj.IsTransaction_idSet():
             raise WxPayException("撤销订单API接口中，参数out_trade_no和transaction_id必须填写一个！")
@@ -252,7 +252,7 @@ class WxPayApi():
     #  @throws WxPayException
     #  @return 成功时返回，其他抛异常
     def report(self, inputObj, timeOut=1):
-        url = "https:#api.mch.weixin.qq.com/payitil/report"
+        url = "https://api.mch.weixin.qq.com/payitil/report"
         # 检测必填参数
         if not inputObj.IsInterface_urlSet():
             raise WxPayException("接口URL，缺少必填参数interface_url！")
@@ -302,7 +302,7 @@ class WxPayApi():
         #  @return 成功时返回，其他抛异常
 
     def shorturl(self, inputObj, timeOut=6):
-        url = "https:#api.mch.weixin.qq.com/tools/shorturl"
+        url = "https://api.mch.weixin.qq.com/tools/shorturl"
         # 检测必填参数
         if not inputObj.IsLong_urlSet():
             raise WxPayException("需要转换的URL，签名用原串，传输需URL encode！")
