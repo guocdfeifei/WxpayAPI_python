@@ -33,7 +33,7 @@
 # TODO
 * Data 基本翻译完, simplexml_load_string实属的实现
 * 还有几个 new self() 等的地方没改
-* curl 相关的
 * 直接使用 msg 指针的几个地方
 * 使用 file_get_contents 
 * return_code
+* 证书路径

@@ -89,29 +89,33 @@ def simplexml_load_string(string, classname, options, ns, is_prefix):
 def substr(string, start, length):
     return string[start:start + length]
 
-# todo 下面的实现
-CURLOPT_HEADER = ""
-CURLOPT_POST = ""
-CURLOPT_POSTFIELDS = ""
-CURLOPT_PROXY = ""
-CURLOPT_PROXYPORT = ""
-CURLOPT_RETURNTRANSFER = ""
-CURLOPT_SSL_VERIFYPEER = ""
-CURLOPT_SSL_VERIFYHOST = ""
-CURLOPT_SSLCERTTYPE = ""
-CURLOPT_SSLCERT = ""
-CURLOPT_SSLKEYTYPE = ""
-CURLOPT_SSLKEY = ""
-CURLOPT_TIMEOUT = ""
-CURLOPT_URL = ""
-TRUE = ""
+
+# 下面注释的是不需要的
+CURLOPT_HEADER = pycurl.HEADER
+CURLOPT_POST = pycurl.POST
+CURLOPT_POSTFIELDS = pycurl.POSTFIELDS
+CURLOPT_PROXY = pycurl.PROXY
+CURLOPT_PROXYPORT = pycurl.PROXYPORT
+# CURLOPT_RETURNTRANSFER = pycurl.RETURNTRANSFER
+CURLOPT_SSL_VERIFYPEER = pycurl.SSL_VERIFYPEER
+CURLOPT_SSL_VERIFYHOST = pycurl.SSL_VERIFYHOST
+CURLOPT_SSLCERTTYPE = pycurl.SSLCERTTYPE
+CURLOPT_SSLCERT = pycurl.SSLCERT
+CURLOPT_SSLKEYTYPE = pycurl.SSLKEYTYPE
+CURLOPT_SSLKEY = pycurl.SSLKEY
+CURLOPT_TIMEOUT = pycurl.TIMEOUT
+CURLOPT_URL = pycurl.URL
+# FALSE = pycurl.FALSE
+# TRUE = pycurl.TRUE
 
 
 def curl_init(url):
     c = pycurl.Curl()
 
     # if $url was set
-    return c.setopt(c.URL, url)
+    c.setopt(c.URL, url)
+    print(c)
+    return c
 
 
 def curl_setopt(curl, option, value):
@@ -119,11 +123,20 @@ def curl_setopt(curl, option, value):
 
 
 def curl_exec(curl):
-    b = StringIO()
-    curl.setopt(pycurl.WRITEFUNCTION, b.write)
-    curl.perform()
-    response = b.getvalue()
+    response = None
+    try:
+        b = StringIO()
+        curl.setopt(pycurl.WRITEFUNCTION, b.write)
+        curl.perform()
+        response = b.getvalue()
+    except Exception as e:
+        setattr(curl, "errno", e)
     return response
+
+
+def curl_errno(curl):
+    return getattr(curl, "errno")
+
 
 def curl_close(curl):
     return curl.close()
