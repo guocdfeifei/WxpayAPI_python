@@ -85,7 +85,6 @@ class WxPayDataBase:
         return result
 
     #  获取设置的值
-    # /
     def GetValues(self):
         return self.values
 
@@ -111,7 +110,7 @@ class WxPayResults(WxPayDataBase):
     #  @param array array
     #  @param 是否检测签名 noCheckSign
     def InitFromArray(self, array, noCheckSign=False):
-        # obj = new self() todo 不使用php的方式
+        # obj = new self() # todo 不使用php的实例化方式
         self.FromArray(array)
         if noCheckSign is False:
             self.CheckSign()
@@ -127,7 +126,7 @@ class WxPayResults(WxPayDataBase):
     #  @param string xml
     #  @throws WxPayException
     def Init(self, xml):
-        # obj = new self() todo 不使用php的方式
+        # obj = new self() # todo 不使用php的实例化方式
         self.FromXml(xml)
         # fix bug 2015-06-29
         if self.values['return_code'] != 'SUCCESS':

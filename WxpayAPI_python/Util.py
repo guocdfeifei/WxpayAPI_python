@@ -74,7 +74,12 @@ def microtime(get_as_float=False):
         return '%f %d' % math.modf(time.time())
 
 
-def mt_rand(low=0, high=sys.maxint):
+def mt_rand(low=0, high=0):
+    if high == 0:
+        try:
+            high = sys.maxsize # python3
+        except:
+            high = sys.maxint # python2
     return random.randint(low, high)
 
 

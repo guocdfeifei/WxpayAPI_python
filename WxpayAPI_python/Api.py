@@ -330,22 +330,27 @@ class WxPayApi():
         self.reportCostTime(url, startTimeStamp, result)  # 上报请求花费时间
         return result
 
-    def notify(self, callback, msg):  # todo msg
+    def notify(self, callback, xml):
         """
         支付结果通用通知
         @param callback def
         直接回调函数使用方法: notify(you_def)
         回调类成员函数方法:notify(array(this, you_def))
         callback  原型为：def def_name(data)
+
+        修改:
+        -----
+        1. 添加 xml 参数,即响应
+        2. 去掉原指针传递的 msg 参数,返回值修改为使用字典返回 msg 和原先的 bool
         """
         # 获取通知的数据
-        xml = file_get_contents('php://input')  # todo 应该需要传参
+        # xml = file_get_contents('php://input')  # 改为传参
         # 如果返回成功则验证签名
         try:
             result = WxPayResults.Init(xml)
         except WxPayException as e:
-            msg = e.errorMessage()  # todo 要直接改掉 穿进来的 msg
-            return False
+            # msg = e.errorMessage()  #  要直接改掉 穿进来的 msg
+            return {"status": False, "msg": e.errorMessage()}  # 改为使用字典返回原先的 bool 和 msg
         return callback(result)
         #
         #  产生随机字符串，不长于32位
@@ -363,9 +368,13 @@ class WxPayApi():
         """
         直接输出xml
         @param xml string
+
+        修改:
+        -----
+        这个方法在 python 的web 框架中无意义
         """
         return xml
-        # echo xml  # todo 改为返回
+        # echo xml  #  改为返回
 
     def reportCostTime(self, url, startTimeStamp, data):
         """
