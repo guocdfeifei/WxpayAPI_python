@@ -39,3 +39,13 @@ class WxPayConfig:
     # 上报等级，0.关闭上报 1.仅错误出错上报 2.全量上报
     # @var int
     REPORT_LEVENL = 1
+
+    def init_with_dict(self, dict_data):
+        """
+        工具函数,便于替换已有的类属性
+        :param dict_data: dict,用于覆盖属性的字典,键名和已有的类属性一致即可覆盖
+        :return:
+        **注意** SSLCERT_PATH 和 SSLKEY_PATH 这两个路径
+        """
+        for k in dict_data.keys():
+            setattr(self, k, dict_data[k])

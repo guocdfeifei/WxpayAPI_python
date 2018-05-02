@@ -19,6 +19,14 @@ class WxPayApi():
     接口访问类，包含所有微信支付API列表的封装，类中方法为static方法，
     每个接口有默认超时时间（除提交被扫支付为10s，上报超时时间为1s外，其他均为6s）
     """
+    def __init__(self, ip):
+        """
+        初始化
+        ------
+        用于实现 php 版本使用 SERVER 获取 ip 等功能
+        :param ip:
+        """
+        self.ip = ip
 
     def unifiedOrder(self, inputObj, timeOut=6):
         """
@@ -48,7 +56,7 @@ class WxPayApi():
 
         inputObj.SetAppid(WxPayConfig.APPID)  # 公众账号ID
         inputObj.SetMch_id(WxPayConfig.MCHID)  # 商户号
-        # inputObj.SetSpbill_create_ip(_SERVER['REMOTE_ADDR']) # 终端ip    todo
+        inputObj.SetUser_ip(self.ip)  # 终端ip
         # inputObj.SetSpbill_create_ip("1.1.1.1")
         inputObj.SetNonce_str(self.getNonceStr())  # 随机字符串
         # 签名
@@ -197,7 +205,7 @@ class WxPayApi():
             return ""
         return response
 
-    def micropay(self, inputObj, timeOut=10):
+    def micropay(self, inputObj, timeOut=10, ip=""):
         """
         提交被扫支付API
         收银员使用扫码设备读取微信用户刷卡授权码以后，二维码或条码信息传送至商户收银台，
@@ -217,7 +225,7 @@ class WxPayApi():
             raise WxPayException("提交被扫支付API接口中，缺少必填参数total_fee！")
         elif not inputObj.IsAuth_codeSet():
             raise WxPayException("提交被扫支付API接口中，缺少必填参数auth_code！")
-        # inputObj.SetSpbill_create_ip(_SERVER['REMOTE_ADDR'])#终端ip  todo
+        inputObj.SetUser_ip(self.ip)  # 终端ip
         inputObj.SetAppid(WxPayConfig.APPID)  # 公众账号ID
         inputObj.SetMch_id(WxPayConfig.MCHID)  # 商户号
         inputObj.SetNonce_str(self.getNonceStr())  # 随机字符串
@@ -252,7 +260,7 @@ class WxPayApi():
         self.reportCostTime(url, startTimeStamp, result)  # 上报请求花费时间
         return result
 
-    def report(self, inputObj, timeOut=1):
+    def report(self, inputObj, timeOut=1, ip=""):
         """
         测速上报，该方法内部封装在report中，使用时请注意异常流程
         WxPayReport中interface_url、return_code、result_code、user_ip、execute_time_必填
@@ -277,13 +285,12 @@ class WxPayApi():
             raise WxPayException("接口耗时，缺少必填参数execute_time_！")
         inputObj.SetAppid(WxPayConfig.APPID)  # 公众账号ID
         inputObj.SetMch_id(WxPayConfig.MCHID)  # 商户号
-        # inputObj.SetUser_ip(_SERVER['REMOTE_ADDR'])#终端ip todo
-        # inputObj.SetTime(date("YmdHis"))#商户上报时间
+        inputObj.SetUser_ip(self.ip)  # 终端ip
         inputObj.SetTime(time.strftime("YmdHis", time.localtime(time.time())))
         inputObj.SetNonce_str(self.getNonceStr())  # 随机字符串
         inputObj.SetSign()  # 签名
         xml = inputObj.ToXml()
-        startTimeStamp = self.getMillisecond()  # 请求开始时间
+        # startTimeStamp = self.getMillisecond()  # 请求开始时间
         response = self.postXmlCurl(xml, url, False, timeOut)
         return response
 

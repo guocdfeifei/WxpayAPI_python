@@ -26,12 +26,11 @@
 * 不能直接替代的手写一个 python 版的同功能函数
 
 ## 区别
-* php 版本用使用 _SERVER 直接获取参数的地方要改为传参
-* php 版本原来有直接 echo 的要改为返回
-* WxPayNotify 类:
-    * Handle 方法添加了一个 xml 参数,需要自己获取返回的xml内容传参
-    * NotifyProcess 去掉了 msg 参数,具体实现的返回值 和 Api.notify 一样
-* Api.notify 
+* Api.WxPayApi:
+    * 使用时先初始化,该类,并传 ip,替换 php 版本用使用 _SERVER 直接获取 ip
+* Data.WxPayNotify.Handle 方法添加了一个 xml 参数,需要自己获取返回的xml内容传参
+* Data.WxPayNotify.NotifyProcess 去掉了 msg 参数,具体实现的返回值 和 Api.notify 一样
+* Api.WxPayApi.notify 
     * 参数:
         * 去掉了指针传参的 msg,改为返回 msg字符串,并因此改变了原返回值类型
         * 添加了一个 xml 参数,即原先使用 file_get_contents('php://input') 获取的响应,便于任何 web 框架传参
@@ -39,13 +38,13 @@
         * 返回值修改为字典 {"status": False, "msg": e.errorMessage()}
         * 键 status 为原先返回的 bool
         * 键 msg 为原先使用指针传递的 msg
-* Api.replyNotify
-    * 此方法在 php 版本中仅仅是输出字符串,在 python web 框架中直接替换为 web 框架的输出语句即可    
+* Api.WxPayApi.replyNotify 在 php 版本中仅仅是输出字符串,可直接替换为 web 框架的输出语句    
     
 # 建议
 * 开发环境为 python3,代码里有一些适配 pyhton2 的语句,但还有很多地方不支持 python2    
+* 在每次请求中都初始化一次所有的类比较好,避免出错
 * Config.WxPayConfig
-    * 建议自己重新实现一个配置类,替换该方法,主要是证书路径一定写好        
+    * 建议使用新加的 init_with_dict 方法替换该方法的属性值,主要是证书路径一定写好        
     
 
 # 进度
@@ -62,5 +61,3 @@
 # TODO
 * Data.FromXml.WxPayDataBase.simplexml_load_string 要根据返回的数据再分析如何解析
     * Util.simplexml_load_string
-* Data.WxPayResults.InitFromArray 和 Data.WxPayResults.Init 的实例化怎么改为 python 版本更好?
-    * 目前还是在每个连接中自己实例化一个新的比较好
