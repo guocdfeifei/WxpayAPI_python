@@ -19,6 +19,7 @@ class WxPayApi():
     接口访问类，包含所有微信支付API列表的封装，类中方法为static方法，
     每个接口有默认超时时间（除提交被扫支付为10s，上报超时时间为1s外，其他均为6s）
     """
+
     def __init__(self, ip):
         """
         初始化
@@ -35,23 +36,23 @@ class WxPayApi():
         """
         url = "https://#api.mch.weixin.qq.com/pay/unifiedorder"
         # 检测必填参数
-        if (not inputObj.IsOut_trade_noSet()):
+        if not inputObj.IsOut_trade_noSet():
             raise WxPayException("缺少统一支付接口必填参数out_trade_no！")
-        elif (not inputObj.IsBodySet()):
+        elif not inputObj.IsBodySet():
             raise WxPayException("缺少统一支付接口必填参数body！")
-        elif (not inputObj.IsTotal_feeSet()):
+        elif not inputObj.IsTotal_feeSet():
             raise WxPayException("缺少统一支付接口必填参数total_fee！")
-        elif (not inputObj.IsTrade_typeSet()):
+        elif not inputObj.IsTrade_typeSet():
             raise WxPayException("缺少统一支付接口必填参数trade_type！")
         # 关联参数
-        if (inputObj.GetTrade_type() == "JSAPI" and not inputObj.IsOpenidSet()):
+        if inputObj.GetTrade_type() == "JSAPI" and not inputObj.IsOpenidSet():
             raise WxPayException("统一支付接口中，缺少必填参数openid！trade_type为JSAPI时，openid为必填参数！")
 
-        if (inputObj.GetTrade_type() == "NATIVE" and not inputObj.IsProduct_idSet()):
+        if inputObj.GetTrade_type() == "NATIVE" and not inputObj.IsProduct_idSet():
             raise WxPayException("统一支付接口中，缺少必填参数product_id！trade_type为JSAPI时，product_id为必填参数！")
 
         # 异步通知url未设置，则使用配置文件中的url
-        if (not inputObj.IsNotify_urlSet()):
+        if not inputObj.IsNotify_urlSet():
             inputObj.SetNotify_url(WxPayConfig.NOTIFY_URL)  # 异步通知url  # todo NOTIFY_URL 找不到定义
 
         inputObj.SetAppid(WxPayConfig.APPID)  # 公众账号ID
@@ -205,7 +206,7 @@ class WxPayApi():
             return ""
         return response
 
-    def micropay(self, inputObj, timeOut=10, ip=""):
+    def micropay(self, inputObj, timeOut=10):
         """
         提交被扫支付API
         收银员使用扫码设备读取微信用户刷卡授权码以后，二维码或条码信息传送至商户收银台，
@@ -256,11 +257,11 @@ class WxPayApi():
         xml = inputObj.ToXml()
         startTimeStamp = self.getMillisecond()  # 请求开始时间
         response = self.postXmlCurl(xml, url, True, timeOut)
-        result = WxPayResults.Init(response)
+        result = WxPayResults.Init(response, xml)
         self.reportCostTime(url, startTimeStamp, result)  # 上报请求花费时间
         return result
 
-    def report(self, inputObj, timeOut=1, ip=""):
+    def report(self, inputObj, timeOut=1):
         """
         测速上报，该方法内部封装在report中，使用时请注意异常流程
         WxPayReport中interface_url、return_code、result_code、user_ip、execute_time_必填
@@ -359,11 +360,10 @@ class WxPayApi():
             # msg = e.errorMessage()  #  要直接改掉 穿进来的 msg
             return {"status": False, "msg": e.errorMessage()}  # 改为使用字典返回原先的 bool 和 msg
         return callback(result)
-        #
-        #  产生随机字符串，不长于32位
-        #  @param length int
-        #  @return 产生的随机字符串
 
+    #  产生随机字符串，不长于32位
+    #  @param length int
+    #  @return 产生的随机字符串
     def getNonceStr(self, length=32):
         chars = "abcdefghijklmnopqrstuvwxyz0123456789"
         str = ""

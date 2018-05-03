@@ -40,6 +40,10 @@ class WxPayConfig:
     # @var int
     REPORT_LEVENL = 1
 
+
+    # todo 原 php 版本的没有 NOTIFY_URL
+    NOTIFY_URL = ""
+
     def init_with_dict(self, dict_data):
         """
         工具函数,便于替换已有的类属性
