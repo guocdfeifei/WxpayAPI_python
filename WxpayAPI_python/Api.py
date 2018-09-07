@@ -21,17 +21,17 @@ class WxPayApi():
     """
 
     def __init__(self, ip):
-        """
-        初始化
-        ------
+        """初始化
+
         用于实现 php 版本使用 SERVER 获取 ip 等功能
         :param ip:
         """
         self.ip = ip
 
     def unifiedOrder(self, inputObj, timeOut=6):
-        """
-        统一下单，WxPayUnifiedOrder中out_trade_no、body、total_fee、trade_type必填
+        """统一下单
+
+        WxPayUnifiedOrder中out_trade_no、body、total_fee、trade_type必填,
         appid、mchid、spbill_create_ip、nonce_str不需要填入
         """
         url = "https://#api.mch.weixin.qq.com/pay/unifiedorder"
@@ -70,9 +70,10 @@ class WxPayApi():
         return result
 
     def orderQuery(self, inputObj, timeOut=6):
-        """
-        查询订单，WxPayOrderQuery中out_trade_no、transaction_id至少填一个
-        appid、mchid、spbill_create_ip、nonce_str不需要填入
+        """查询订单
+
+        WxPayOrderQuery中out_trade_no、transaction_id至少填一个,appid、mchid、spbill_create_ip、nonce_str不需要填入
+
         @param inputObj WxPayOrderQuery
         @param timeOut int
         @throws WxPayException
@@ -97,9 +98,10 @@ class WxPayApi():
         return result
 
     def closeOrder(self, inputObj, timeOut=6):
-        """
-        关闭订单，WxPayCloseOrder中out_trade_no必填
-        appid、mchid、spbill_create_ip、nonce_str不需要填入
+        """关闭订单
+
+        WxPayCloseOrder中out_trade_no必填,appid、mchid、spbill_create_ip、nonce_str不需要填入
+
         @param inputObj WxPayCloseOrder
         @param timeOut int
         @throws WxPayException
@@ -121,10 +123,12 @@ class WxPayApi():
         return result
 
     def refund(self, inputObj, timeOut=6):
-        """
-        申请退款，WxPayRefund中out_trade_no、transaction_id至少填一个且
-        out_refund_no、total_fee、refund_fee、op_user_id为必填参数
+        """申请退款
+
+        WxPayRefund中out_trade_no、transaction_id至少填一个且
+        out_refund_no、total_fee、refund_fee、op_user_id为必填参数,
         appid、mchid、spbill_create_ip、nonce_str不需要填入
+
         @param inputObj WxPayRefund
         @param timeOut int
         @throws WxPayException
@@ -154,12 +158,13 @@ class WxPayApi():
         return result
 
     def refundQuery(self, inputObj, timeOut=6):
-        """
-        查询退款
+        """查询退款
+
         提交退款申请后，通过调用该接口查询退款状态。退款有一定延时，
         用零钱支付的退款20分钟内到账，银行卡支付的退款3个工作日后重新查询退款状态。
-        WxPayRefundQuery中out_refund_no、out_trade_no、transaction_id、refund_id四个参数必填一个
+        WxPayRefundQuery中out_refund_no、out_trade_no、transaction_id、refund_id四个参数必填一个,
         appid、mchid、spbill_create_ip、nonce_str不需要填入
+
         @param inputObj WxPayRefundQuery
         @param timeOut int
         @throws WxPayException
@@ -184,9 +189,11 @@ class WxPayApi():
         return result
 
     def downloadBill(self, inputObj, timeOut=6):
-        """
-        下载对账单，WxPayDownloadBill中bill_date为必填参数
+        """下载对账单
+
+        WxPayDownloadBill中bill_date为必填参数,
         appid、mchid、spbill_create_ip、nonce_str不需要填入
+
         @param inputObj WxPayDownloadBill
         @param timeOut int
         @throws WxPayException
@@ -207,12 +214,14 @@ class WxPayApi():
         return response
 
     def micropay(self, inputObj, timeOut=10):
-        """
-        提交被扫支付API
+        """提交被扫支付API
+
         收银员使用扫码设备读取微信用户刷卡授权码以后，二维码或条码信息传送至商户收银台，
         由商户收银台或者商户后台调用该接口发起支付。
-        WxPayWxPayMicroPay中body、out_trade_no、total_fee、auth_code参数必填
+
+        WxPayWxPayMicroPay中body、out_trade_no、total_fee、auth_code参数必填,
         appid、mchid、spbill_create_ip、nonce_str不需要填入
+
         @param inputObj WxPayWxPayMicroPay
         @param timeOut int
         """
@@ -239,9 +248,11 @@ class WxPayApi():
         return result
 
     def reverse(self, inputObj, timeOut=6):
-        """
-        撤销订单API接口，WxPayReverse中参数out_trade_no和transaction_id必须填写一个
+        """撤销订单API接口
+
+        WxPayReverse中参数out_trade_no和transaction_id必须填写一个,
         appid、mchid、spbill_create_ip、nonce_str不需要填入
+
         @param inputObj WxPayReverse
         @param timeOut int
         @throws WxPayException
@@ -262,10 +273,12 @@ class WxPayApi():
         return result
 
     def report(self, inputObj, timeOut=1):
-        """
-        测速上报，该方法内部封装在report中，使用时请注意异常流程
-        WxPayReport中interface_url、return_code、result_code、user_ip、execute_time_必填
+        """测速上报
+
+        该方法内部封装在report中，使用时请注意异常流程,
+        WxPayReport中interface_url、return_code、result_code、user_ip、execute_time_必填,
         appid、mchid、spbill_create_ip、nonce_str不需要填入
+
         @param inputObj WxPayReport
         @param timeOut int
         @throws WxPayException
@@ -296,9 +309,10 @@ class WxPayApi():
         return response
 
     def bizpayurl(self, inputObj, timeOut=6):
-        """
-        生成二维码规则,模式一生成支付二维码
+        """生成二维码规则,模式一生成支付二维码
+
         appid、mchid、spbill_create_ip、nonce_str不需要填入
+
         @param inputObj WxPayBizPayUrl
         @param timeOut int
         @throws WxPayException
@@ -339,17 +353,18 @@ class WxPayApi():
         return result
 
     def notify(self, callback, xml):
-        """
-        支付结果通用通知
+        """支付结果通用通知
+
         @param callback def
+
         直接回调函数使用方法: notify(you_def)
         回调类成员函数方法:notify(array(this, you_def))
         callback  原型为：def def_name(data)
 
-        修改:
-        -----
-        1. 添加 xml 参数,即响应
-        2. 去掉原指针传递的 msg 参数,返回值修改为使用字典返回 msg 和原先的 bool
+        **修改**::
+
+        * 添加 xml 参数,即响应
+        * 去掉原指针传递的 msg 参数,返回值修改为使用字典返回 msg 和原先的 bool
         """
         # 获取通知的数据
         # xml = file_get_contents('php://input')  # 改为传参
@@ -372,21 +387,23 @@ class WxPayApi():
         return str
 
     def replyNotify(self, xml):
-        """
-        直接输出xml
+        """直接输出xml
+
         @param xml string
 
-        修改:
-        -----
-        这个方法在 python 的web 框架中无意义
+        **修改**::
+
+        * 这个方法在 python 的web 框架中无意义
         """
         return xml
         # echo xml  #  改为返回
 
     def reportCostTime(self, url, startTimeStamp, data):
-        """
-        上报数据， 上报的时候将屏蔽所有异常流程
-        @param usrl string
+        """上报数据
+
+        上报的时候将屏蔽所有异常流程
+
+        @param url string
         @param startTimeStamp int
         @param data array
         """
@@ -432,12 +449,12 @@ class WxPayApi():
             pass  # 不做任何处理
 
     def postXmlCurl(self, xml, url, useCert=False, second=30):
-        """
-        以post方式提交xml到对应的接口url
-        @param string xml  需要post的xml数据
-        @param string url  url
-        @param bool useCert 是否需要证书，默认不需要
-        @param int second   url执行超时时间，默认30s
+        """以post方式提交xml到对应的接口url
+
+        @param xml  需要post的xml数据
+        @param url  url
+        @param useCert 是否需要证书，默认不需要
+        @param second   url执行超时时间，默认30s
         @throws WxPayException
         """
         ch = curl_init()
@@ -477,8 +494,8 @@ class WxPayApi():
             raise WxPayException("curl出错，错误码:" + error)
 
     def getMillisecond(self):
-        """
-        获取毫秒级别的时间戳
+        """获取毫秒级别的时间戳
+
         :return:
         """
         # 获取毫秒的时间戳

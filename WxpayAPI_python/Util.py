@@ -1,4 +1,30 @@
-# 替换 php 的同名函数,实现一样的功能
+"""
+替换 php 的同名函数,实现一样的功能,以实现最小化的修改幅度
+
+原先的导入能兼容python2,为了解决使用sphinx 生成文档的导入错误,先注释掉,
+
+.. code:: python
+
+    try:
+        from io import BytesIO as StringIO  # python3
+    except ImportError:  # python2
+        try:
+            from cStringIO import StringIO
+        except ImportError:
+            from StringIO import StringIO
+
+        StringIO = StringIO.StringIO()
+
+    try:
+        import urllib  # python2
+
+        quote_plus = urllib.quote_plus
+    except ImportError:  # python3
+        import urllib.parse
+
+        quote_plus = urllib.parse.quote_plus
+
+"""
 import ast
 import base64
 import hashlib
@@ -12,24 +38,11 @@ import sys
 import textwrap
 import time
 
-try:
-    from io import BytesIO as StringIO  # python3
-except ImportError:  # python2
-    try:
-        from cStringIO import StringIO
-    except ImportError:
-        from StringIO import StringIO
+from io import BytesIO as StringIO  # python3
 
-    StringIO = StringIO.StringIO()
+import urllib.parse
 
-try:
-    import urllib  # python2
-
-    quote_plus = urllib.quote_plus
-except ImportError:  # python3
-    import urllib.parse
-
-    quote_plus = urllib.parse.quote_plus
+quote_plus = urllib.parse.quote_plus
 
 import pycurl
 
